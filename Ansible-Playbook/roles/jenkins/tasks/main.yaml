@@ -1,0 +1,20 @@
+- name: add jenkins key
+  ansible.builtin.apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+- name: "Set key to apt repository"
+  ansible.builtin.apt_repository:
+      repo: deb https://pkg.jenkins.io/debian-stable binary/
+      state: present
+- name: "Install open jdk 11"
+  ansible.builtin.apt:
+      name: openjdk-11-jre-headless
+      state: present
+- name: install jenkins
+  ansible.builtin.apt:
+      name: jenkins
+      state: present
+- name: "Starting jenkins"
+  ansible.builtin.service:
+      name: "jenkins"
+      state: started
+      enabled: yes
