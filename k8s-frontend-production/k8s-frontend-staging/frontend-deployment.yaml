@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app-frontend-production
+  namespace: production
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: todo-app-frontend-production
+  template:
+    metadata:
+      labels:
+        app: todo-app-frontend-production
+    spec:
+      containers:
+      - name: todo-app-frontend-production
+        image: adamandika/client:latest
+        ports: 
+        - containerPort: 3000

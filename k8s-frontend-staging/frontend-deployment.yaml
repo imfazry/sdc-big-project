@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app-frontend-staging
+  namespace: staging
+spec:
+  selector:
+    matchLabels:
+      app: todo-app-frontend-staging
+  template:
+    metadata:
+      labels:
+        app: todo-app-frontend-staging
+    spec:
+      containers:
+      - name: todo-app-frontend-staging
+        image: adamandika/client:staging
+        ports: 
+        - containerPort: 3000

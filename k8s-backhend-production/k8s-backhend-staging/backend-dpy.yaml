@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app-backend-production
+  namespace: production
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: todo-app-backend-production
+  template:
+    metadata:
+      labels:
+        app: todo-app-backend-production
+    spec:
+      containers:
+      - name: todo-app-backend-production
+        image: adamandika/server-js:latest
+        env:
+          - name: MONGO_URL
+            value: "mongodb://mongodb-service:27017"
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        ports:
+        - containerPort: 4000
+        
