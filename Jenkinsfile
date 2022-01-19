@@ -29,7 +29,7 @@ pipeline {
             steps{
                 script{
                         commit_id = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-                        sh "docker build -t adamandika/client:$commit_id  ."
+                        sh "docker build -t adamandika/client:$commit_id  todos-app"
                         sh "docker build -t adamandika/server-js:$commit_id  backend"
                        
                     }
