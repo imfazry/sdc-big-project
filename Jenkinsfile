@@ -19,7 +19,7 @@ pipeline{
         }
         stage('melakukan docker build dan docker push'){
             steps{
-                sh("cat $HOME/password.txt | docker login -u adamandika --password-stdin")
+                sh("cat /home/ubuntu/password.txt | docker login --username adamandika --password-stdin")
                 sh("docker build -t adamandika/client:$BUILD_NUMBER .")
                 sh("docker push adamandika/server-js:$BUILD_NUMBER")
             }
