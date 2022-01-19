@@ -52,7 +52,7 @@ pipeline {
             steps{
                 script{
                     commit_id = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-                    sh 'ls k8s/production/backend'
+           
                     sh "sed -i 's/IMAGE_TAG/$commit_id/g' k8s-frontend-production/k8s-frontend-staging/frontend-deployment.yaml"
                     sh "sed -i 's/IMAGE_TAG/$commit_id/g' k8s-backhend-production/k8s-backhend-staging/backend-dpy.yaml"
                     sh "sed -i 's/IMAGE_TAG/$commit_id/g' k8s-frontend-staging/frontend-deployment.yaml"
