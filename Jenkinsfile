@@ -39,9 +39,12 @@ pipeline {
 
         stage("Push Image"){
             steps{
-                sh('cat $HOME/password.txt | docker login -u adamandika --password-stdin')
-                sh('docker push adamandika/client:${commit_id}')
-                sh('docker push adamandika/server-js:${commit_id}')
+                script{
+                commit_id = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+                sh "cat $HOME/password.txt | docker login -u adamandika --password-stdin"
+                sh "docker push adamandika/client:$commit_id"
+                sh "docker push adamandika/server-js:$commit_id"
+                }
             }
         }
             
