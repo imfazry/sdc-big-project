@@ -1,31 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb-database
+  name: mongodb
   namespace: production
-  labels:
-    app: todo-app
-    tier: database
 spec:
-  replicas: 1
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   selector:
     matchLabels:
-      app: todo-app
-      tier: database
+      app: mongodb
   template:
     metadata:
       labels:
-        app: todo-app
-        tier: database
+        app: mongodb
     spec:
       containers:
       - name: mongodb
         image: mongo:3.6.19-xenial
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
         ports:
         - containerPort: 27017
         volumeMounts:

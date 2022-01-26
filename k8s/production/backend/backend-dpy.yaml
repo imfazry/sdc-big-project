@@ -7,14 +7,21 @@ metadata:
     app: todo-app
     tier: backend
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: todo-app
+      tier: backend
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
         app: todo-app
+        tier: backend
     spec:
       containers:
       - name: todo-app
@@ -29,7 +36,7 @@ spec:
             memory: 400Mi
         env:
           - name: MONGO_URL
-            value: "mongodb://mongodb-service.production:27017"
+            value: "mongodb://mongodb-service.staging:27017"
         ports:
         - containerPort: 4000
           protocol: TCP

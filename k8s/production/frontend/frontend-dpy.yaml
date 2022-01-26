@@ -3,49 +3,17 @@ kind: Deployment
 metadata:
   name: todo-app-frontend-production
   namespace: production
-  labels:
-    app: todo-app
-    tier: frontend
 spec:
-  replicas: 1
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   selector:
     matchLabels:
-      app: todo-app
+      app: todo-app-frontend-production
   template:
     metadata:
       labels:
-        app: todo-app
-        tier: frontend
+        app: todo-app-frontend-production
     spec:
       containers:
-      - name: todo-app
+      - name: todo-app-frontend-production
         image: imfazry/todo-app-client:v1
-        imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: 200m
-            memory: 500Mi
-          limits:
-            cpu: 500m
-            memory: 1000Mi
         ports: 
         - containerPort: 3000
-          protocol: TCP
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: tier
-                  operator: In
-                  values:
-                  - frontend
-              topologyKey: kubernetes.io/hostname   
-      restartPolicy: Always

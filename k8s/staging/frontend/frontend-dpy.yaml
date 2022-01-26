@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: todo-app-frontend-staging
-        image: adamandika/client:staging
+        image: imfazry/todo-app-client:v1
         ports: 
         - containerPort: 3000

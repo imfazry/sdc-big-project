@@ -36,7 +36,7 @@ spec:
             memory: 400Mi
         env:
           - name: MONGO_URL
-            value: "mongodb://mongodb-service:27017"
+            value: "mongodb://mongodb-service.staging:27017"
         ports:
         - containerPort: 4000
           protocol: TCP
