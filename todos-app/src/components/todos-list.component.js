@@ -21,7 +21,7 @@ export default class TodosList extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://todo-production.adam131.my.id/todos/')
+        axios.get('http://todo-production.fazry.my.id/todos/')
             .then(response => {
                 this.setState({ todos: response.data });
             })

@@ -30,7 +30,7 @@ resource "aws_instance" "jenkins_instance" {
   }
 
    provisioner "local-exec" {
-      working_dir = "/home/adamandika/terraform/playbook1"
+      working_dir = "/home/fazry93/terraform/playbook1"
       command = "ansible-playbook -i ${self.public_ip}, -u ubuntu --private-key ~/Downloads/adam1.pem jenkins.yaml"
     }
 }

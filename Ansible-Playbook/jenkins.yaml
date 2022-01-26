@@ -1,5 +1,0 @@
-- name: install jenkins
-  hosts: all
-  become: true
-  roles:
-  - jenkins

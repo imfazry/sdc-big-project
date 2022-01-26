@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-database
+  namespace: production
+  labels:
+    app: todo-app
+    tier: database
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: todo-app
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: todo-app
+        tier: database
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:3.6.19-xenial
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+          - name: mongo-data
+            mountPath: /data/db
+        resources:
+          requests:
+            cpu: 300m
+            memory: 200Mi
+          limits:
+            cpu: 600m
+            memory: 500Mi
+      restartPolicy: Always
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: tier
+                  operator: In
+                  values:
+                  - database
+              topologyKey: kubernetes.io/hostname 
+      volumes:
+        - name: mongo-data
+          persistentVolumeClaim:
+              claimName: mongo-data 

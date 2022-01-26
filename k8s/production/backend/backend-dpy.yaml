@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app-backend-production
+  namespace: production
+  labels:
+    app: todo-app
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-app
+  template:
+    metadata:
+      labels:
+        app: todo-app
+    spec:
+      containers:
+      - name: todo-app
+        image: imfazry/todo-app-server:v1
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 400Mi
+        env:
+          - name: MONGO_URL
+            value: "mongodb://mongodb-service.production:27017"
+        ports:
+        - containerPort: 4000
+          protocol: TCP
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: tier
+                  operator: In
+                  values:
+                  - backend
+              topologyKey: kubernetes.io/hostname   
+      restartPolicy: Always  

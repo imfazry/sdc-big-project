@@ -1,0 +1,85 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: es
+  namespace: kube-logging
+  labels:
+    app: es
+spec:
+  selector:
+    app: es
+  ports:
+    - port: 9200
+      name: rest
+    - port: 9300
+      name: inter-node
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: es
+  namespace: kube-logging
+  labels:
+    app: es
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: es
+  template:
+    metadata:
+      labels:
+        app: es
+    spec:
+      containers:
+      - env:
+         - name: cluster.name
+           value: 'cluster-elasticsearch'
+         - name: node.name
+           value: 'es'
+         - name: ES_JAVA_OPTS
+           value: '-Xms512m -Xmx512m'
+        #  - name: xpack.monitoring.collection.enabled
+          #  value: 'true'
+        #  - name: xpack.monitoring.exporters.remote.type
+        #    value: 'http'
+        #  - name: xpack.monitoring.exporters.remote.host
+        #    value: 'monitor'
+         - name: discovery.seed_hosts
+           value: 'es'
+         - name: cluster.initial_master_nodes
+           value: 'es'
+         - name: ELASTIC_PASSWORD
+           value: 'abc123'
+         - name: xpack.security.enabled
+           value: 'true'
+        #  - name: xpack.security.audit.enabled
+        #    value: 'true'
+        #  - name: xpack.monitoring.exporters.remote.auth.username
+        #    value: 'elastic'
+        #  - name: xpack.monitoring.exporters.remote.auth.password
+        #    value: 'abc123'
+         - name: ELASTIC_USERNAME
+           value: 'elastic'
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+        imagePullPolicy: Always
+        name: es
+        ports:
+        - containerPort: 9200
+          protocol: TCP
+        - containerPort: 9300
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: es
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - emptyDir: {}
+        name: es
